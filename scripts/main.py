@@ -17,26 +17,28 @@ def main():
     assert f1 is not f2 is not f3 is not None
     
     # Question 2.1
-    # f1_fnmr, f1_fmr, f1_eer = utils.compute_sim_fmr_fnmr_eer(f1)
-    # f2_fnmr, f2_fmr, f2_eer = utils.compute_sim_fmr_fnmr_eer(f2)
-    # f3_fnmr, f3_fmr, f3_eer = utils.compute_sim_fmr_fnmr_eer(f3)
+    print("Question 2.1")
+    f1_fnmr, f1_fmr, f1_eer = utils.compute_sim_fmr_fnmr_eer(f1)
+    f2_fnmr, f2_fmr, f2_eer = utils.compute_sim_fmr_fnmr_eer(f2)
+    f3_fnmr, f3_fmr, f3_eer = utils.compute_sim_fmr_fnmr_eer(f3)
 
-    # print(f"Data Set 1 - FNMR: {f1_fnmr:.3f} FMR: {f1_fmr:.3f} EER: {f1_eer:.3f}")
-    # print(f"Data Set 2 - FNMR: {f2_fnmr:.3f} FMR: {f2_fmr:.3f} EER: {f2_eer:.3f}")
-    # print(f"Data Set 3 - FNMR: {f3_fnmr:.3f} FMR: {f3_fmr:.3f} EER: {f3_eer:.3f}")
+    print(f"Data Set 1 - FNMR: {f1_fnmr:.3f} FMR: {f1_fmr:.3f} EER: {f1_eer:.3f}")
+    print(f"Data Set 2 - FNMR: {f2_fnmr:.3f} FMR: {f2_fmr:.3f} EER: {f2_eer:.3f}")
+    print(f"Data Set 3 - FNMR: {f3_fnmr:.3f} FMR: {f3_fmr:.3f} EER: {f3_eer:.3f}")
 
     # Question 2.3
-    # f1_d_prime = utils.compute_d_prime(f1)
-    # f2_d_prime = utils.compute_d_prime(f2)
-    # f3_d_prime = utils.compute_d_prime(f3)
+    f1_d_prime = utils.compute_d_prime(f1)
+    f2_d_prime = utils.compute_d_prime(f2)
+    f3_d_prime = utils.compute_d_prime(f3)
 
-    # print(f"Data Set 1 d\': {f1_d_prime:.3f}")
-    # print(f"Data Set 2 d\': {f2_d_prime:.3f}")
-    # print(f"Data Set 3 d\': {f3_d_prime:.3f}")
+    print(f"Data Set 1 d\': {f1_d_prime:.3f}")
+    print(f"Data Set 2 d\': {f2_d_prime:.3f}")
+    print(f"Data Set 3 d\': {f3_d_prime:.3f}")
 
-    # print("Complete.")
+    print("Question 2.1 Completed.")
 
     # Question 2.6
+    print("Question 2.6")
 
     f1_x = []
     f1_y = []
@@ -75,6 +77,8 @@ def main():
     sklearn_total_runtime = deltas[0][1] + deltas[1][1] + deltas[2][1]
 
     print(f"Deltas: {deltas}\nNaive Time: {naive_total_runtime:.3f}\nSKLearn Time: {sklearn_total_runtime:.3f}")
+
+    print("Question 2.6 Completed.")
 
 if __name__ == "__main__":
     main()
