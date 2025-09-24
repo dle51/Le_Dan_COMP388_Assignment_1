@@ -113,7 +113,7 @@ def compute_d_prime(observations):
 # Observations must be an array of (<label>,<score>) elements.
 # Labels must be either 0 (impostor) or something else (genuine).
 # If the number of impostors is zero, it returns 'NaN' as FMR.
-def compute_sim_fmr(observations, threshold):
+def compute_sim_fmr(observations, threshold, is_similar = True):
     fmr = float("NaN")  # nothing computed, returns not-a-number
 
     # counters
@@ -124,7 +124,7 @@ def compute_sim_fmr(observations, threshold):
     for obs in observations:
         if obs[0] == 0:  # impostor
             impostor_count = impostor_count + 1
-            if obs[1] >= threshold:
+            if obs[1] >= threshold or (obs[1] <= threshold and not is_similar):
                 false_match_count = false_match_count + 1
 
     # FMR computation
@@ -139,7 +139,7 @@ def compute_sim_fmr(observations, threshold):
 # Observations must be an array of (<label>,<score>) elements.
 # Labels must be either 0 (impostor) or something else (genuine).
 # If the number of genuine observations is zero, it returns 'NaN' as FNMR.
-def compute_sim_fnmr(observations, threshold):
+def compute_sim_fnmr(observations, threshold, is_similar = True):
     fnmr = float("NaN")  # nothing computed, returns not-a-number
 
     # counters
@@ -151,7 +151,7 @@ def compute_sim_fnmr(observations, threshold):
         if obs[0] != 0:  # genuine observation
             genuine_count = genuine_count + 1
 
-            if obs[1] < threshold:
+            if obs[1] < threshold or (obs[1] < threshold and not is_similar):
                 false_non_match_count = false_non_match_count + 1
 
     # FNMR computation
@@ -167,7 +167,7 @@ def compute_sim_fnmr(observations, threshold):
 # Output: FNMR, FMR, EER_THRESHOLD.
 # If either the number of impostors or genuine observations is zero,
 # it returns 'NaN', 'NaN', 'NaN'.
-def compute_sim_fmr_fnmr_eer(observations):
+def compute_sim_fmr_fnmr_eer(observations, is_similar = True):
     # computed FNMR and FMR at EER, and EER threshold
     output_fnmr = float("NaN")  # nothing computed, returns not-a-number
     output_fmr = float("NaN")
@@ -181,8 +181,8 @@ def compute_sim_fmr_fnmr_eer(observations):
     if len(scores) > 0:
         # for each score taken as threshold
         for threshold in scores:
-            current_fnmr = compute_sim_fnmr(observations, threshold)
-            current_fmr = compute_sim_fmr(observations, threshold)
+            current_fnmr = compute_sim_fnmr(observations, threshold, is_similar)
+            current_fmr = compute_sim_fmr(observations, threshold, is_similar)
 
             # cancels computation if any of the FNMR or FMR values are 'NaN' (impossible to compute them)
             if not float("-inf") < current_fnmr < float("inf") or not float(
@@ -212,7 +212,7 @@ def compute_sim_fmr_fnmr_eer(observations):
 # Labels must be either 0 (impostor) or something else (genuine).
 # Output: AUC, array with FMR values, array with TMR values.
 # If either the number of impostors or genuine observations is zero, it returns 'NaN', [], [].
-def compute_sim_fmr_tmr_auc(observations):
+def compute_sim_fmr_tmr_auc(observations, is_similar = True):
     # output values
     auc = float("NaN")  # nothing computed, returns not-a-number
     fmrs = []
@@ -223,8 +223,8 @@ def compute_sim_fmr_tmr_auc(observations):
     if len(scores) > 0:
         # for each score taken as a threshold
         for threshold in scores:
-            current_fmr = compute_sim_fmr(observations, threshold)
-            current_fnmr = compute_sim_fnmr(observations, threshold)
+            current_fmr = compute_sim_fmr(observations, threshold, is_similar)
+            current_fnmr = compute_sim_fnmr(observations, threshold, is_similar)
 
             # cancels computation if any of the FNMR or FMR values are 'NaN' (impossible to compute them)
             if not float("-inf") < current_fmr < float("inf") or not float(
@@ -289,11 +289,11 @@ def plot_hist(observations):
 # Plots the FMR x TMR AUC from the given similarity observations.
 # Observations must be an array of (<label>,<score>) elements.
 # Labels must be either 0 (impostor) or something else (genuine).
-def plot_sim_fmr_tmr_auc(observations):
+def plot_sim_fmr_tmr_auc(observations, is_similar = True):
     plt.xlabel("FMR")
     plt.ylabel("TMR")
 
-    auc, fmrs, tmrs = compute_sim_fmr_tmr_auc(observations)
+    auc, fmrs, tmrs = compute_sim_fmr_tmr_auc(observations, is_similar)
     if float("-inf") < auc < float("inf"):
         plt.plot(fmrs, tmrs, label="AUC: " + "{:.2f}".format(auc))
         plt.plot([0, 1], [0, 1], color="gray", linestyle="--")
